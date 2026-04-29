@@ -1,0 +1,75 @@
+.admin-sidebar {
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  background: #ececec;
+  padding: 20px 14px 24px;
+  overflow-y: auto;
+}
+
+.admin-sidebar__sections {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.admin-sidebar__section {
+  margin-bottom: 14px;
+}
+
+.admin-sidebar__section-button {
+  width: 100%;
+  border: none;
+  background: transparent;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 6px 8px;
+  font-size: 26px;
+  font-weight: 700;
+  color: #121212;
+  cursor: pointer;
+}
+
+.admin-sidebar__section-button.is-active {
+  background: #f2a8a8;
+}
+
+.admin-sidebar__dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #777777;
+}
+
+.admin-sidebar__chevron {
+  margin-left: auto;
+  font-size: 15px;
+  transform: rotate(-90deg);
+  transition: transform 0.2s ease;
+}
+
+.admin-sidebar__chevron.is-expanded {
+  transform: rotate(0deg);
+}
+
+.admin-sidebar__children {
+  margin: 4px 0 0;
+  padding-left: 28px;
+  list-style: disc;
+}
+
+.admin-sidebar__children li {
+  margin: 2px 0;
+  color: #121212;
+}
+
+.admin-sidebar__child-button {
+  border: none;
+  background: transparent;
+  padding: 2px 0;
+  font-size: 22px;
+  color: #121212;
+  cursor: pointer;
+}

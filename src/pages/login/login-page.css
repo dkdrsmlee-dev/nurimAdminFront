@@ -1,0 +1,47 @@
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.login-page__topbar {
+  height: 56px;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+}
+
+.login-page__tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 54px;
+  height: 34px;
+  padding: 0 14px;
+  border: 1px solid #9f9f9f;
+  border-radius: 6px;
+  background: #f0f0f0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.login-page__main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px 48px 56px;
+}
+
+.login-page__footer {
+  background: #050505;
+  color: #e8e8e8;
+  min-height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 14px 24px;
+  font-size: 14px;
+  line-height: 1.5;
+}

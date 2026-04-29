@@ -1,0 +1,15 @@
+:root {
+  --color-surface-page: #b9b7b7;
+  --color-surface-panel: #efefef;
+  --color-surface-input: #f3f3f3;
+  --color-surface-button: #070707;
+  --color-surface-button-disabled: #6a6a6a;
+  --color-border-weak: #c5c5c5;
+  --color-border-strong: #646464;
+  --color-text-primary: #121212;
+  --color-text-secondary: #666666;
+  --color-text-inverse: #ffffff;
+  --color-accent-danger: #e23535;
+  --font-family-base: 'Pretendard', 'Noto Sans KR', 'Apple SD Gothic Neo',
+    'Segoe UI', sans-serif;
+}

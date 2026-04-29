@@ -1,0 +1,41 @@
+.brand-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #000000;
+}
+
+.brand-logo__mark {
+  display: inline-grid;
+  place-items: center;
+  border-radius: 10px;
+  background: #000000;
+  color: #ffffff;
+  line-height: 1;
+}
+
+.brand-logo__text {
+  line-height: 1;
+}
+
+.brand-logo--lg .brand-logo__mark {
+  width: 58px;
+  height: 58px;
+  font-size: 40px;
+}
+
+.brand-logo--lg .brand-logo__text {
+  font-size: 56px;
+}
+
+.brand-logo--md .brand-logo__mark {
+  width: 42px;
+  height: 42px;
+  font-size: 28px;
+}
+
+.brand-logo--md .brand-logo__text {
+  font-size: 40px;
+}

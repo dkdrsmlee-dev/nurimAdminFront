@@ -1,0 +1,27 @@
+@import './tokens.css';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+  min-width: 1280px;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-family-base);
+  color: var(--color-text-primary);
+  background: var(--color-surface-page);
+  overflow-x: auto;
+}
+
+button,
+input {
+  font: inherit;
+}
