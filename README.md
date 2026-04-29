@@ -1,73 +1,61 @@
-# React + TypeScript + Vite
+# nurimAdminFront
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+`nurimAppDemo`의 관리자 페이지 프론트엔드 프로젝트입니다.  
+현재는 로그인 화면과 대시보드 기본 셸(좌측 트리 메뉴)까지 구현된 상태입니다.
 
-Currently, two official plugins are available:
+## 기술 스택
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- React 19
+- TypeScript
+- Vite
+- ESLint
 
-## React Compiler
+## 개발 원칙
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- PC 전용 화면 기준으로 개발합니다. (모바일 버전 미지원)
+- 퍼블리싱(UI)과 프론트 로직을 분리해 병렬 작업 가능 구조를 유지합니다.
+  - UI: `shared/ui`, `features/*/ui`
+  - 로직: `features/*/model`, `pages/*`, `app/*`
 
-## Expanding the ESLint configuration
+## 프로젝트 구조
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```txt
+src/
+  app/                  # 앱 엔트리/화면 전환
+  pages/                # 페이지 컨테이너
+  features/             # 도메인별 UI/모델
+  shared/
+    styles/             # 전역 스타일/토큰
+    ui/                 # 공용 UI 컴포넌트
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 실행 방법
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+npm run dev
 ```
+
+- 기본 접속 주소: `http://localhost:5173`
+
+## 주요 스크립트
+
+```bash
+npm run dev      # 개발 서버 실행
+npm run build    # 프로덕션 빌드
+npm run lint     # ESLint 검사
+npm run preview  # 빌드 결과 미리보기
+```
+
+## 현재 구현 범위
+
+- 로그인 페이지
+  - 백엔드 연동 없이 로그인 버튼 클릭 시 대시보드로 이동
+- 대시보드 페이지
+  - 좌측 트리 메뉴
+  - 메뉴 항목 접기/펼치기
+  - 사이드바 너비 드래그 리사이즈 (최소 220px ~ 최대 520px)
+
+## 참고
+
+- 인증/권한/실데이터 API 연동은 이후 단계에서 추가 예정입니다.
