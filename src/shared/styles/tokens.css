@@ -1,4 +1,6 @@
 :root {
+  --layout-min-width: 1280px;
+
   --color-surface-page: #b9b7b7;
   --color-surface-panel: #efefef;
   --color-surface-input: #f3f3f3;
@@ -10,6 +12,33 @@
   --color-text-secondary: #666666;
   --color-text-inverse: #ffffff;
   --color-accent-danger: #e23535;
+  --color-text-black: #000000;
+  --color-text-gray-500: #8d8d8d;
+
+  --color-admin-page-bg: #dcdcdc;
+  --color-admin-topbar-bg: #d0d0d0;
+  --color-admin-content-bg: #dddddd;
+  --color-admin-sidebar-bg: #ececec;
+  --color-admin-border-default: #cfcfcf;
+  --color-admin-border-strong: #9f9f9f;
+  --color-admin-border-muted: #b7b7b7;
+  --color-admin-resizer: #c0c0c0;
+  --color-admin-resizer-hover: #8e8e8e;
+  --color-admin-menu-active: #f2a8a8;
+  --color-admin-menu-dot: #777777;
+  --color-admin-breadcrumb: #3d3d3d;
+
+  --color-footer-bg: #050505;
+  --color-footer-text: #e8e8e8;
+  --color-login-tag-bg: #f0f0f0;
+
+  --size-sidebar-min: 220px;
+  --size-sidebar-default: 280px;
+  --size-sidebar-max: 520px;
+  --size-login-panel-width: 510px;
+
   --font-family-base: 'Pretendard', 'Noto Sans KR', 'Apple SD Gothic Neo',
     'Segoe UI', sans-serif;
+  --font-size-sidebar-parent: 26px;
+  --font-size-sidebar-child: 22px;
 }

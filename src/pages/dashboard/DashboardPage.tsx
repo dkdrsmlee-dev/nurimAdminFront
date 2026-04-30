@@ -1,4 +1,6 @@
-import { useEffect, useRef, useState } from 'react'
+import { useResizableSidebar } from '../../features/layout/model/useResizableSidebar'
+import { adminMenuSections } from '../../features/navigation/model/adminMenu'
+import { useSidebarTree } from '../../features/navigation/model/useSidebarTree'
 import { AdminSidebarTree } from '../../features/navigation/ui/AdminSidebarTree'
 import './dashboard-page.css'
 
@@ -6,54 +8,41 @@ const SIDEBAR_MIN_WIDTH = 220
 const SIDEBAR_MAX_WIDTH = 520
 const SIDEBAR_DEFAULT_WIDTH = 280
 
-export function DashboardPage() {
-  const bodyRef = useRef<HTMLDivElement | null>(null)
-  const [sidebarWidth, setSidebarWidth] = useState(SIDEBAR_DEFAULT_WIDTH)
-  const [isResizing, setIsResizing] = useState(false)
+type DashboardPageProps = {
+  onMoveToPreview: () => void
+}
 
-  useEffect(() => {
-    if (!isResizing) {
-      return
-    }
-
-    const handleMouseMove = (event: MouseEvent) => {
-      const bodyLeft = bodyRef.current?.getBoundingClientRect().left ?? 0
-      const nextWidth = event.clientX - bodyLeft
-      const clampedWidth = Math.min(
-        SIDEBAR_MAX_WIDTH,
-        Math.max(SIDEBAR_MIN_WIDTH, nextWidth)
-      )
-      setSidebarWidth(clampedWidth)
-    }
-
-    const handleMouseUp = () => {
-      setIsResizing(false)
-    }
-
-    document.addEventListener('mousemove', handleMouseMove)
-    document.addEventListener('mouseup', handleMouseUp)
-    document.body.style.cursor = 'col-resize'
-    document.body.style.userSelect = 'none'
-
-    return () => {
-      document.removeEventListener('mousemove', handleMouseMove)
-      document.removeEventListener('mouseup', handleMouseUp)
-      document.body.style.cursor = ''
-      document.body.style.userSelect = ''
-    }
-  }, [isResizing])
+export function DashboardPage({ onMoveToPreview }: DashboardPageProps) {
+  const { expandedSections, toggleSection } = useSidebarTree(adminMenuSections)
+  const { containerRef, sidebarWidth, startResizing } = useResizableSidebar({
+    defaultWidth: SIDEBAR_DEFAULT_WIDTH,
+    minWidth: SIDEBAR_MIN_WIDTH,
+    maxWidth: SIDEBAR_MAX_WIDTH,
+  })
 
   return (
     <div className="dashboard-page">
       <header className="dashboard-page__topbar">
         <span className="dashboard-page__breadcrumb">홈_대시보드</span>
+        <button
+          type="button"
+          className="dashboard-page__preview-link"
+          onClick={onMoveToPreview}
+        >
+          UI Preview
+        </button>
       </header>
-      <div className="dashboard-page__body" ref={bodyRef}>
+      <div className="dashboard-page__body" ref={containerRef}>
         <aside
           className="dashboard-page__sidebar"
           style={{ width: `${sidebarWidth}px` }}
         >
-          <AdminSidebarTree />
+          <AdminSidebarTree
+            sections={adminMenuSections}
+            expandedSections={expandedSections}
+            onToggleSection={toggleSection}
+            activeSectionKey="home"
+          />
         </aside>
         <div
           className="dashboard-page__resizer"
@@ -62,13 +51,7 @@ export function DashboardPage() {
           aria-valuemin={SIDEBAR_MIN_WIDTH}
           aria-valuemax={SIDEBAR_MAX_WIDTH}
           aria-valuenow={sidebarWidth}
-          onMouseDown={(event) => {
-            if (event.button !== 0) {
-              return
-            }
-            event.preventDefault()
-            setIsResizing(true)
-          }}
+          onMouseDown={startResizing}
         />
         <main className="dashboard-page__content" />
       </div>

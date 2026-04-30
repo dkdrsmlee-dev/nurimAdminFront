@@ -21,9 +21,9 @@
 
 ```txt
 src/
-  app/                  # 앱 엔트리/화면 전환
+  app/                  # 앱 엔트리/화면 라우팅
   pages/                # 페이지 컨테이너
-  features/             # 도메인별 UI/모델
+  features/             # 도메인별 UI/모델/훅
   shared/
     styles/             # 전역 스타일/토큰
     ui/                 # 공용 UI 컴포넌트
@@ -37,6 +37,9 @@ npm run dev
 ```
 
 - 기본 접속 주소: `http://localhost:5173`
+  - 로그인: `http://localhost:5173/login`
+  - 대시보드: `http://localhost:5173/dashboard`
+  - UI 프리뷰: `http://localhost:5173/ui-preview`
 
 ## 주요 스크립트
 
@@ -55,6 +58,8 @@ npm run preview  # 빌드 결과 미리보기
   - 좌측 트리 메뉴
   - 메뉴 항목 접기/펼치기
   - 사이드바 너비 드래그 리사이즈 (최소 220px ~ 최대 520px)
+- UI Preview 페이지
+  - 로그인/사이드바 UI를 앱 로직과 분리해 확인 가능한 퍼블리싱 전용 화면
 
 ## 참고
 
