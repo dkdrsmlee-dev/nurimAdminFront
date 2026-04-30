@@ -20,6 +20,9 @@ export function useResizableSidebar({
       return
     }
 
+    const previousCursor = document.body.style.cursor
+    const previousUserSelect = document.body.style.userSelect
+
     const handleMouseMove = (event: MouseEvent) => {
       const containerLeft = containerRef.current?.getBoundingClientRect().left ?? 0
       const nextWidth = event.clientX - containerLeft
@@ -39,8 +42,8 @@ export function useResizableSidebar({
     return () => {
       document.removeEventListener('mousemove', handleMouseMove)
       document.removeEventListener('mouseup', stopResizing)
-      document.body.style.cursor = ''
-      document.body.style.userSelect = ''
+      document.body.style.cursor = previousCursor
+      document.body.style.userSelect = previousUserSelect
     }
   }, [isResizing, maxWidth, minWidth])
 

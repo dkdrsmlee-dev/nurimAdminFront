@@ -1,12 +1,13 @@
 import { useResizableSidebar } from '../../features/layout/model/useResizableSidebar'
+import {
+  SIDEBAR_DEFAULT_WIDTH,
+  SIDEBAR_MAX_WIDTH,
+  SIDEBAR_MIN_WIDTH,
+} from '../../features/layout/model/sidebarSize'
 import { adminMenuSections } from '../../features/navigation/model/adminMenu'
 import { useSidebarTree } from '../../features/navigation/model/useSidebarTree'
 import { AdminSidebarTree } from '../../features/navigation/ui/AdminSidebarTree'
 import './dashboard-page.css'
-
-const SIDEBAR_MIN_WIDTH = 220
-const SIDEBAR_MAX_WIDTH = 520
-const SIDEBAR_DEFAULT_WIDTH = 280
 
 type DashboardPageProps = {
   onMoveToPreview: () => void
