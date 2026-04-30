@@ -32,6 +32,7 @@
   --color-footer-text: #e8e8e8;
   --color-login-tag-bg: #f0f0f0;
 
+  /* Keep in sync with src/features/layout/model/sidebarSize.ts */
   --size-sidebar-min: 220px;
   --size-sidebar-default: 280px;
   --size-sidebar-max: 520px;
