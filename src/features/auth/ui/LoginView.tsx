@@ -6,6 +6,8 @@ import './login-view.css'
 type LoginViewProps = {
   values: LoginFormValues
   noticeMessage: string
+  isSubmitting: boolean
+  errorMessage: string
   onFieldChange: (field: LoginField, value: string) => void
   onSubmit: (event: FormEvent<HTMLFormElement>) => void
   onResetPassword: () => void
@@ -14,6 +16,8 @@ type LoginViewProps = {
 export function LoginView({
   values,
   noticeMessage,
+  isSubmitting,
+  errorMessage,
   onFieldChange,
   onSubmit,
   onResetPassword,
@@ -28,17 +32,18 @@ export function LoginView({
       <BrandLogo size="md" />
 
       <form className="login-form" onSubmit={onSubmit}>
-        <label className="sr-only" htmlFor="login-username">
+        <label className="sr-only" htmlFor="login-admin-id">
           아이디
         </label>
         <input
-          id="login-username"
-          name="username"
+          id="login-admin-id"
+          name="adminId"
           type="text"
           autoComplete="username"
           placeholder="아이디를 입력해 주세요"
-          value={values.username}
-          onChange={(event) => onFieldChange('username', event.target.value)}
+          value={values.adminId}
+          onChange={(event) => onFieldChange('adminId', event.target.value)}
+          disabled={isSubmitting}
         />
 
         <label className="sr-only" htmlFor="login-password">
@@ -52,21 +57,30 @@ export function LoginView({
           placeholder="비밀번호를 입력해 주세요"
           value={values.password}
           onChange={(event) => onFieldChange('password', event.target.value)}
+          disabled={isSubmitting}
         />
 
         <button
           type="button"
           className="login-form__forgot"
           onClick={onResetPassword}
+          disabled={isSubmitting}
         >
           비밀번호를 잊으셨나요?
         </button>
 
+        {errorMessage ? (
+          <p className="login-form__error" role="alert">
+            {errorMessage}
+          </p>
+        ) : null}
+
         <button
           type="submit"
           className="login-form__submit"
+          disabled={isSubmitting}
         >
-          로그인
+          {isSubmitting ? '로그인 중...' : '로그인'}
         </button>
       </form>
 

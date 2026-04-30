@@ -41,6 +41,27 @@ npm run dev
   - 대시보드: `http://localhost:5173/dashboard`
   - UI 프리뷰: `http://localhost:5173/ui-preview`
 
+### 로그인 API 연동 설정
+
+로그인 화면은 아래 API를 호출합니다.
+
+- `POST /api/v1/admin/auth/login`
+- 요청 바디: `{ "adminId": "...", "password": "..." }`
+
+기본값은 same-origin 호출이며, 백엔드 도메인이 다르면 `.env`에 base URL을 지정합니다.
+
+```bash
+VITE_API_BASE_URL=http://localhost:3000
+```
+
+개발 서버(`localhost:5173`)에서 CORS 없이 바로 붙이려면 Vite 프록시를 사용합니다.
+
+```bash
+VITE_API_PROXY_TARGET=http://192.168.0.147:4011
+```
+
+- 위 값을 설정하면 `/api/*` 요청이 해당 백엔드로 프록시됩니다.
+
 ## 라우팅/배포 전략
 
 - 현재 라우팅은 `Path 기반` (`/login`, `/dashboard`, `/ui-preview`)입니다.

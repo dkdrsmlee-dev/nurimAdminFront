@@ -17,7 +17,7 @@ export function UiPreviewPage({
 }: UiPreviewPageProps) {
   const { expandedSections, toggleSection } = useSidebarTree(adminMenuSections)
   const [loginValues, setLoginValues] = useState({
-    username: '',
+    adminId: '',
     password: '',
   })
 
@@ -49,6 +49,8 @@ export function UiPreviewPage({
             <LoginView
               values={loginValues}
               noticeMessage="세션 유지 시간은 8시간 입니다. 로그인 5회 실패 시 계정 잠금 상태가 됩니다."
+              isSubmitting={false}
+              errorMessage=""
               onFieldChange={handleFieldChange}
               onSubmit={(event) => event.preventDefault()}
               onResetPassword={() => window.alert('비밀번호 재설정 페이지 연결 예정')}

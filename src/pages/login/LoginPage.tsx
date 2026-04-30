@@ -7,7 +7,14 @@ type LoginPageProps = {
 }
 
 export function LoginPage({ onLoginSuccess }: LoginPageProps) {
-  const { values, noticeMessage, handleFieldChange } = useLoginForm()
+  const {
+    values,
+    noticeMessage,
+    isSubmitting,
+    errorMessage,
+    handleFieldChange,
+    handleSubmit,
+  } = useLoginForm({ onLoginSuccess })
 
   return (
     <div className="login-page">
@@ -19,11 +26,10 @@ export function LoginPage({ onLoginSuccess }: LoginPageProps) {
         <LoginView
           values={values}
           noticeMessage={noticeMessage}
+          isSubmitting={isSubmitting}
+          errorMessage={errorMessage}
           onFieldChange={handleFieldChange}
-          onSubmit={(event) => {
-            event.preventDefault()
-            onLoginSuccess()
-          }}
+          onSubmit={handleSubmit}
           onResetPassword={() => {
             window.alert('비밀번호 재설정 페이지는 다음 단계에서 연결합니다.')
           }}
