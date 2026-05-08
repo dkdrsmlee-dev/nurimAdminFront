@@ -50,7 +50,7 @@ pipeline {
       steps {
         sh 'docker inspect -f "{{.State.Running}}" "$FRONT_CONTAINER" | grep -x true'
         sh 'docker port "$FRONT_CONTAINER" "$FRONT_CONTAINER_PORT"'
-        sh 'curl -fsS "http://127.0.0.1:$FRONT_HOST_PORT/login" >/dev/null'
+        sh 'docker exec "$FRONT_CONTAINER" wget -qO- "http://127.0.0.1/login" >/dev/null'
       }
     }
   }
