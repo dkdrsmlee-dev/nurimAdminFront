@@ -62,6 +62,20 @@ VITE_API_PROXY_TARGET=http://192.168.0.147:4011
 
 - 위 값을 설정하면 `/api/*` 요청이 해당 백엔드로 프록시됩니다.
 
+### RBAC 메뉴 권한 연동
+
+대시보드 좌측 메뉴는 정적 하드코딩 목록이 아니라, 로그인 사용자 Role 기반 권한 트리로 렌더링됩니다.
+
+- `GET /api/v1/admin/rbac/roles`
+- `GET /api/v1/admin/rbac/roles/{roleId}/permission-tree`
+- 각 메뉴의 `permission.canRead` 값을 기준으로 노출 여부를 결정합니다.
+- 여러 Role이 존재하면 메뉴 권한(`canCreate/read/update/delete`)을 OR 병합합니다.
+
+참고:
+
+- 현재 백엔드는 `Authorization: Bearer <token>` 헤더 기준으로 정상 동작합니다.
+- 문서상 `access-token` 보안 스킴이 있어도, 프론트는 호환을 위해 두 헤더를 모두 전송합니다.
+
 ## 라우팅/배포 전략
 
 - 현재 라우팅은 `Path 기반` (`/login`, `/dashboard`, `/ui-preview`)입니다.
@@ -69,6 +83,7 @@ VITE_API_PROXY_TARGET=http://192.168.0.147:4011
 - 이 저장소는 Nginx fallback 설정 파일을 포함합니다.
   - `deploy/nginx/default.conf`
   - 핵심 설정: `try_files $uri $uri/ /index.html;`
+  - API 프록시: `/api/*` 요청을 `http://192.168.0.147:4011`로 전달
 
 ## Docker 실행 (Nginx fallback 포함)
 
@@ -79,6 +94,48 @@ docker run --rm -p 8080:80 nurim-admin-front
 
 - 접속 주소: `http://localhost:8080`
 - 위 컨테이너는 빌드 결과물(`dist`)을 Nginx로 서빙하며 SPA fallback이 적용됩니다.
+- 컨테이너 내부 Nginx가 `/api/*`를 `http://192.168.0.147:4011`으로 프록시합니다.
+
+## Jenkins 자동 배포 (147 서버)
+
+앱 웹프론트와 동일하게 GitHub main 변경 감지(`Poll SCM`) 후 Docker 재배포 방식으로 운영할 수 있습니다.
+
+```text
+GitHub main push
+→ Jenkins checkout
+→ docker build
+→ 기존 nurim-admin-front 컨테이너 종료/삭제
+→ 신규 컨테이너 실행
+→ http://192.168.0.147:3001 반영
+```
+
+Jenkins Pipeline Job 설정:
+
+```text
+Definition: Pipeline script from SCM
+SCM: Git
+Repository URL: https://github.com/dkdrsmlee-dev/nurimAdminFront.git
+Branch: main
+Script Path: Jenkinsfile
+```
+
+권장 트리거:
+
+```text
+Build Triggers: Poll SCM
+Schedule: H/1 * * * *
+```
+
+파이프라인은 저장소 루트의 `Jenkinsfile`을 사용하며 기본 배포 포트는 `3001`입니다.
+(`FRONT_HOST_PORT` 변경 시 포트 조정 가능)
+
+수동 배포 확인 명령:
+
+```bash
+docker build -t nurim-admin-front:latest -f Dockerfile .
+docker rm -f nurim-admin-front 2>/dev/null || true
+docker run -d --name nurim-admin-front --restart unless-stopped -p 3001:80 nurim-admin-front:latest
+```
 
 ## 주요 스크립트
 
@@ -92,9 +149,11 @@ npm run preview  # 빌드 결과 미리보기
 ## 현재 구현 범위
 
 - 로그인 페이지
-  - 백엔드 연동 없이 로그인 버튼 클릭 시 대시보드로 이동
+  - `POST /api/v1/admin/auth/login` 백엔드 연동
+  - 로그인 성공 시 access/refresh 토큰 세션 저장(localStorage)
+  - 만료/401 발생 시 `POST /api/v1/auth/refresh` 자동 재발급 후 보호 API 1회 재시도
 - 대시보드 페이지
-  - 좌측 트리 메뉴
+  - 좌측 트리 메뉴 (RBAC 권한 트리 기반 동적 렌더링)
   - 메뉴 항목 접기/펼치기
   - 사이드바 너비 드래그 리사이즈 (최소 220px ~ 최대 520px)
 - UI Preview 페이지
@@ -111,4 +170,4 @@ npm run preview  # 빌드 결과 미리보기
 
 ## 참고
 
-- 인증/권한/실데이터 API 연동은 이후 단계에서 추가 예정입니다.
+- 상세 페이지 라우팅/권한별 버튼 제어(`canCreate/update/delete`)는 다음 단계에서 확장 예정입니다.

@@ -17,6 +17,12 @@
   margin-bottom: 14px;
 }
 
+.admin-sidebar__section[data-depth='1'],
+.admin-sidebar__section[data-depth='2'],
+.admin-sidebar__section[data-depth='3'] {
+  margin-bottom: 2px;
+}
+
 .admin-sidebar__section-button {
   width: 100%;
   border: none;
@@ -56,20 +62,37 @@
 
 .admin-sidebar__children {
   margin: 4px 0 0;
-  padding-left: 28px;
-  list-style: disc;
+  padding-left: 22px;
+  list-style: none;
 }
 
-.admin-sidebar__children li {
-  margin: 2px 0;
-  color: var(--color-text-primary);
+.admin-sidebar__children[data-depth='2'] {
+  padding-left: 18px;
+}
+
+.admin-sidebar__children[data-depth='3'] {
+  padding-left: 14px;
 }
 
 .admin-sidebar__child-button {
+  width: 100%;
+  text-align: left;
   border: none;
   background: transparent;
-  padding: 2px 0;
+  padding: 4px 2px;
   font-size: var(--font-size-sidebar-child);
   color: var(--color-text-primary);
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.admin-sidebar__child-button.is-active {
+  background: var(--color-admin-menu-active);
+}
+
+.admin-sidebar__child-button .admin-sidebar__dot {
+  width: 8px;
+  height: 8px;
 }

@@ -1,6 +1,12 @@
+import { buildApiUrl } from '../../../shared/api/apiUrl'
+
 export type AdminLoginRequest = {
   adminId: string
   password: string
+}
+
+export type AdminRefreshRequest = {
+  refreshToken: string
 }
 
 export type AdminLoginResponse = {
@@ -25,18 +31,13 @@ export class AdminAuthApiError extends Error {
 }
 
 const ADMIN_LOGIN_PATH = '/api/v1/admin/auth/login'
+const AUTH_REFRESH_PATH = '/api/v1/auth/refresh'
 
-function buildApiUrl(path: string): string {
-  const baseUrl = import.meta.env.VITE_API_BASE_URL?.trim() ?? ''
-
-  if (baseUrl.length === 0) {
-    return path
-  }
-
-  return `${baseUrl.replace(/\/+$/, '')}${path}`
-}
-
-function pickErrorMessage(payload: unknown, status: number): string {
+function pickErrorMessage(
+  payload: unknown,
+  status: number,
+  unauthorizedFallbackMessage: string
+): string {
   if (payload && typeof payload === 'object') {
     const msgValue = (payload as { msg?: unknown }).msg
     if (typeof msgValue === 'string' && msgValue.trim().length > 0) {
@@ -61,7 +62,7 @@ function pickErrorMessage(payload: unknown, status: number): string {
   }
 
   if (status === 401 || status === 403) {
-    return '아이디 또는 비밀번호를 확인해 주세요.'
+    return unauthorizedFallbackMessage
   }
 
   if (status >= 500) {
@@ -134,7 +135,39 @@ export async function loginAdmin(
   if (!response.ok) {
     throw new AdminAuthApiError(
       response.status,
-      pickErrorMessage(responsePayload, response.status)
+      pickErrorMessage(
+        responsePayload,
+        response.status,
+        '아이디 또는 비밀번호를 확인해 주세요.'
+      )
+    )
+  }
+
+  return normalizeLoginResponse(responsePayload)
+}
+
+export async function refreshAdminToken(
+  request: AdminRefreshRequest
+): Promise<AdminLoginResponse> {
+  const response = await fetch(buildApiUrl(AUTH_REFRESH_PATH), {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    },
+    body: JSON.stringify(request),
+  })
+
+  const responsePayload = await response.json().catch(() => null)
+
+  if (!response.ok) {
+    throw new AdminAuthApiError(
+      response.status,
+      pickErrorMessage(
+        responsePayload,
+        response.status,
+        '로그인이 만료되었습니다. 다시 로그인해 주세요.'
+      )
     )
   }
 

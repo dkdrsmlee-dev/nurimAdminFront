@@ -43,6 +43,26 @@
   flex-shrink: 0;
 }
 
+.dashboard-page__menu-state {
+  padding: 24px 16px;
+  font-size: 15px;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+
+.dashboard-page__menu-state p {
+  margin: 0 0 10px;
+}
+
+.dashboard-page__menu-state button {
+  border: 1px solid var(--color-admin-border-strong);
+  background: var(--color-surface-panel);
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
 .dashboard-page__resizer {
   width: 10px;
   cursor: col-resize;

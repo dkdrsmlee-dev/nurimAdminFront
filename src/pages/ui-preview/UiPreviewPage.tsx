@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import { adminMenuSections } from '../../features/navigation/model/adminMenu'
 import { useSidebarTree } from '../../features/navigation/model/useSidebarTree'
 import { AdminSidebarTree } from '../../features/navigation/ui/AdminSidebarTree'
 import type { LoginField } from '../../features/auth/model/useLoginForm'
 import { LoginView } from '../../features/auth/ui/LoginView'
+import { previewAdminMenuSections } from './mockAdminMenu'
 import './ui-preview-page.css'
 
 type UiPreviewPageProps = {
@@ -15,7 +15,7 @@ export function UiPreviewPage({
   onMoveToLogin,
   onMoveToDashboard,
 }: UiPreviewPageProps) {
-  const { expandedSections, toggleSection } = useSidebarTree(adminMenuSections)
+  const { expandedSections, toggleSection } = useSidebarTree(previewAdminMenuSections)
   const [loginValues, setLoginValues] = useState({
     adminId: '',
     password: '',
@@ -62,7 +62,7 @@ export function UiPreviewPage({
           <h2>AdminSidebarTree</h2>
           <div className="ui-preview-page__sidebar-stage">
             <AdminSidebarTree
-              sections={adminMenuSections}
+              sections={previewAdminMenuSections}
               expandedSections={expandedSections}
               onToggleSection={toggleSection}
               activeSectionKey="home"

@@ -81,3 +81,36 @@ export function getAdminAccessToken(): string | null {
   const session = readAdminAuthSession()
   return session?.accessToken ?? null
 }
+
+function decodeBase64Url(value: string): string {
+  const normalized = value.replace(/-/g, '+').replace(/_/g, '/')
+  const padded = normalized.padEnd(Math.ceil(normalized.length / 4) * 4, '=')
+  return window.atob(padded)
+}
+
+export function getAdminRoleKeysFromToken(): string[] {
+  const session = readAdminAuthSession()
+
+  if (!session) {
+    return []
+  }
+
+  try {
+    const parts = session.accessToken.split('.')
+
+    if (parts.length < 2) {
+      return []
+    }
+
+    const payloadText = decodeBase64Url(parts[1])
+    const payload = JSON.parse(payloadText) as { roles?: unknown }
+
+    if (!Array.isArray(payload.roles)) {
+      return []
+    }
+
+    return payload.roles.filter((role): role is string => typeof role === 'string')
+  } catch {
+    return []
+  }
+}

@@ -1,11 +1,13 @@
+import { useState } from 'react'
 import { useResizableSidebar } from '../../features/layout/model/useResizableSidebar'
 import {
   SIDEBAR_DEFAULT_WIDTH,
   SIDEBAR_MAX_WIDTH,
   SIDEBAR_MIN_WIDTH,
 } from '../../features/layout/model/sidebarSize'
-import { adminMenuSections } from '../../features/navigation/model/adminMenu'
+import type { AdminMenuSection } from '../../features/navigation/model/adminMenu'
 import { useSidebarTree } from '../../features/navigation/model/useSidebarTree'
+import { useAuthorizedSidebarMenu } from '../../features/navigation/model/useAuthorizedSidebarMenu'
 import { AdminSidebarTree } from '../../features/navigation/ui/AdminSidebarTree'
 import './dashboard-page.css'
 
@@ -13,13 +15,27 @@ type DashboardPageProps = {
   onMoveToPreview: () => void
 }
 
+function includesMenuKey(sections: AdminMenuSection[], key: string): boolean {
+  return sections.some(
+    (section) =>
+      section.key === key || (section.children.length > 0 && includesMenuKey(section.children, key))
+  )
+}
+
 export function DashboardPage({ onMoveToPreview }: DashboardPageProps) {
-  const { expandedSections, toggleSection } = useSidebarTree(adminMenuSections)
+  const { sections, isLoading, errorMessage, reload } = useAuthorizedSidebarMenu()
+  const { expandedSections, toggleSection } = useSidebarTree(sections)
+  const [selectedMenuKey, setSelectedMenuKey] = useState<string>()
   const { containerRef, sidebarWidth, startResizing } = useResizableSidebar({
     defaultWidth: SIDEBAR_DEFAULT_WIDTH,
     minWidth: SIDEBAR_MIN_WIDTH,
     maxWidth: SIDEBAR_MAX_WIDTH,
   })
+
+  const activeSectionKey =
+    selectedMenuKey && includesMenuKey(sections, selectedMenuKey)
+      ? selectedMenuKey
+      : sections[0]?.key
 
   return (
     <div className="dashboard-page">
@@ -38,12 +54,28 @@ export function DashboardPage({ onMoveToPreview }: DashboardPageProps) {
           className="dashboard-page__sidebar"
           style={{ width: `${sidebarWidth}px` }}
         >
-          <AdminSidebarTree
-            sections={adminMenuSections}
-            expandedSections={expandedSections}
-            onToggleSection={toggleSection}
-            activeSectionKey="home"
-          />
+          {isLoading ? (
+            <div className="dashboard-page__menu-state">메뉴 권한 정보를 불러오는 중...</div>
+          ) : errorMessage ? (
+            <div className="dashboard-page__menu-state">
+              <p>{errorMessage}</p>
+              <button type="button" onClick={() => void reload()}>
+                다시 시도
+              </button>
+            </div>
+          ) : sections.length === 0 ? (
+            <div className="dashboard-page__menu-state">
+              표시 가능한 메뉴 권한이 없습니다.
+            </div>
+          ) : (
+            <AdminSidebarTree
+              sections={sections}
+              expandedSections={expandedSections}
+              onToggleSection={toggleSection}
+              activeSectionKey={activeSectionKey}
+              onSelectMenu={(menu) => setSelectedMenuKey(menu.key)}
+            />
+          )}
         </aside>
         <div
           className="dashboard-page__resizer"
